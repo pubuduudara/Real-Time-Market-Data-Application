@@ -1,21 +1,16 @@
-import express from "express";
+import { AppDataSource } from "../config/database";
+import dotenv from "dotenv";
+import logger from "./utils/logger";
+import { CryptoClient } from "./websockets/cryptoClient";
 
-const app = express();
-app.use(express.json());
+dotenv.config();
 
-// TODO: use API routes
+AppDataSource.initialize()
+  .then(() => {
+    logger.info("Database connection established");
 
-// Global error handler
-app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(err.stack);
-    res.status(500).send("Something broke!");
-  }
-);
-
-export default app;
+    const cryptoClient = new CryptoClient("wss://api.tiingo.com/crypto");
+  })
+  .catch((error) => {
+    logger.error(`Error initializing database: ${error}`);
+  });
