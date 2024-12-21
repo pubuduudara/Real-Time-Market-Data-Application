@@ -1,8 +1,16 @@
+import { CryptoAssetService } from "../services/cryptoAsset.service";
+import { CryptoMarketDataService } from "../services/cryptoMarketData.service";
 import { AppUtil } from "../utils/app.utils";
 import { handleError, handleSuccess } from "../utils/responseHandler.utils";
 import { Request, Response } from "express";
 
 export class CryptoMarketPriceController {
+  private cryptoAssetService: CryptoAssetService;
+  private cryptoMarketDataService: CryptoMarketDataService;
+  constructor() {
+    this.cryptoAssetService = new CryptoAssetService();
+    this.cryptoMarketDataService = new CryptoMarketDataService();
+  }
   public static async getPrices(req: Request, res: Response): Promise<void> {
     try {
       const { tickers, startDate, endDate } = req.query;

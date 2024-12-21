@@ -6,23 +6,16 @@ import { CryptoMarketDataService } from "../services/cryptoMarketData.service";
 export class CryptoClient extends WebSocketClient {
   private cryptoMarketDataService: CryptoMarketDataService;
 
-  constructor(
-    url: string,
-    bufferLimit: number = 1000,
-    flushInterval: number = 5000
-  ) {
+  constructor(url: string) {
     super(url);
-    this.cryptoMarketDataService = new CryptoMarketDataService(
-      bufferLimit,
-      flushInterval
-    );
+    this.cryptoMarketDataService = new CryptoMarketDataService();
   }
 
   protected async handleMessage(data: any): Promise<void> {
     try {
       const marketData: CryptoMarketDataDTO =
         CryptoMarketDataDTO.mapRawMessageToDto(data);
-      await this.cryptoMarketDataService.saveToBuffer(marketData);
+      await this.cryptoMarketDataService.addToBuffer(marketData);
     } catch (error) {
       logger.warn("Invalid market data format, skipping message.");
     }
