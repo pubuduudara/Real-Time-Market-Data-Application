@@ -1,6 +1,6 @@
 import { CryptoMarketDataDTO } from "../dto/cryptoMarketData.dto";
 import { MarketTradeDao } from "../models/dao/cryptoTrade.dao";
-import logger from "../utils/logger";
+import logger from "../utils/logger.utils";
 
 export class CryptoMarketDataService {
   private buffer: CryptoMarketDataDTO[] = [];

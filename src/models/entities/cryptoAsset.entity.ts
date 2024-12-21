@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-@Entity({ name: "CryptoTrades" })
-export class CryptoTradeEntity {
+@Entity({ name: "CryptoAssets" })
+export class CryptoAssetEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -9,16 +9,7 @@ export class CryptoTradeEntity {
   ticker: string;
 
   @Column()
-  timeStamp: Date;
-
-  @Column()
-  exchange: string;
-
-  @Column()
-  lastSize: number;
-
-  @Column()
-  lastPrice: number;
+  createdAt: Date;
 }
 
 //TODO: add key constraints like uniqe keys

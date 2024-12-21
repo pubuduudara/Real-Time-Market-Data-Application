@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import logger from "../../utils/logger";
+import logger from "../../utils/logger.utils";
 
 export abstract class WebSocketClient {
   protected socket: WebSocket;

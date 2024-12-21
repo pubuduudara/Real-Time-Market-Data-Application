@@ -1,6 +1,6 @@
 import { WebSocketClient } from "./abstract/webSocketClient";
 import { CryptoMarketDataDTO } from "../dto/cryptoMarketData.dto";
-import logger from "../utils/logger";
+import logger from "../utils/logger.utils";
 import { CryptoMarketDataService } from "../services/cryptoMarketData.service";
 
 export class CryptoClient extends WebSocketClient {

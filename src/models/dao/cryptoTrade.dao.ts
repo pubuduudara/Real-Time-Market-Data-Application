@@ -1,9 +1,9 @@
-import { DataSource, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { AppDataSource } from "../../../config/database";
 import { CryptoTradeEntity } from "../entities/cryptoTrade.entity";
 import { CryptoMarketDataDTO } from "../../dto/cryptoMarketData.dto";
 
-/** This class is responsible for database operations connecting with the market_data_buffer table */
+/** This class is responsible for database operations connecting with the CryptoTrades table */
 export class MarketTradeDao {
   private repository: Repository<CryptoTradeEntity>;
 

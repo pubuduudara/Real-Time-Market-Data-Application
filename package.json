@@ -9,7 +9,9 @@
   "scripts": {
     "start": "npx tsc && node build/app.js",
     "dev": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run:feed": "ts-node src/main.feed.ts",
+    "run:rest": "ts-node src/main.rest.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
+    "joi": "^17.13.3",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20",
