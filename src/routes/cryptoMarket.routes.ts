@@ -3,12 +3,23 @@ import { CryptoMarketPriceController } from "../controllers/cryptoMarketPrice.co
 import { validateRequest } from "../middlewares/requestValidator";
 import { cryptoPricesSchema } from "../requestSchemas/cryptoPrices.schema";
 
-const router = express.Router();
+class CryptoMarketPriceRoutes {
+  public router: express.Router;
+  private cryptoMarketPriceController: CryptoMarketPriceController;
 
-router.get(
-  "/crypto/prices",
-  validateRequest(cryptoPricesSchema, "query"),
-  CryptoMarketPriceController.getPrices
-);
+  constructor() {
+    this.router = express.Router();
+    this.cryptoMarketPriceController = new CryptoMarketPriceController();
+    this.initializeRoutes();
+  }
 
-export default router;
+  private initializeRoutes(): void {
+    this.router.get(
+      "/crypto/prices",
+      validateRequest(cryptoPricesSchema, "query"),
+      (req, res) => this.cryptoMarketPriceController.getPrices(req, res)
+    );
+  }
+}
+
+export default new CryptoMarketPriceRoutes().router;

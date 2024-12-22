@@ -1,38 +1,39 @@
-import { CryptoAssetService } from "../services/cryptoAsset.service";
 import { CryptoMarketDataService } from "../services/cryptoMarketData.service";
 import { AppUtil } from "../utils/app.utils";
 import { handleError, handleSuccess } from "../utils/responseHandler.utils";
 import { Request, Response } from "express";
 
 export class CryptoMarketPriceController {
-  private cryptoAssetService: CryptoAssetService;
   private cryptoMarketDataService: CryptoMarketDataService;
   constructor() {
-    this.cryptoAssetService = new CryptoAssetService();
     this.cryptoMarketDataService = new CryptoMarketDataService();
   }
-  public static async getPrices(req: Request, res: Response): Promise<void> {
+  public async getPrices(req: Request, res: Response): Promise<void> {
     try {
-      const { tickers, startDate, endDate } = req.query;
-
+      const { tickers, startDate, endDate, page, pageSize } = req.query;
       // Parse tickers
-      const tickersArray = (tickers as string).split(",");
+      //TODO: check if we can do these modifications in the JOI middleware
+      const tickersArray = tickers ? (tickers as string).split(",") : undefined;
       const parsedStartDate = new Date(startDate as string);
       const parsedEndDate = AppUtil.parseDateOrDefault(endDate as string);
-      // Mock data fetch for demonstration
-      const prices = [
-        {
-          ticker: "a",
-          price: 950.45,
-          timestamp: parsedStartDate.toISOString(),
-        },
-        {
-          ticker: "b",
-          price: 123.55,
-          timestamp: parsedEndDate.toISOString(),
-        },
-      ];
-      handleSuccess(res, prices);
+      const currentPage = parseInt(page as string, 10);
+      const size = parseInt(pageSize as string, 10);
+      const trades = await this.cryptoMarketDataService.getTradePrices(
+        tickersArray,
+        parsedStartDate,
+        parsedEndDate,
+        currentPage,
+        size
+      );
+
+      //TODO: add response mapper DTOs
+
+      handleSuccess(res, {
+        data: trades.data,
+        total: trades.total,
+        page: currentPage,
+        pageSize: size,
+      });
     } catch (err) {
       handleError(res, err);
     }
