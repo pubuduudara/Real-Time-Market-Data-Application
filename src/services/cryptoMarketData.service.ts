@@ -3,6 +3,7 @@ import { CryptoAssetDao } from "../models/dao/cryptoAsset.dao";
 import { CryptoTradeDao } from "../models/dao/cryptoTrade.dao";
 import { CryptoTradeEntity } from "../models/entities/cryptoTrade.entity";
 import logger from "../utils/logger.utils";
+import { WebSocketServer } from "../websockets/publishers/webSocketServer";
 import { BufferManager } from "./bufferManager.service";
 
 export class CryptoMarketDataService {
@@ -11,6 +12,7 @@ export class CryptoMarketDataService {
   private cryptoAssetDao: CryptoAssetDao;
   private bufferLimit = 100;
   private flushInterval = 5000;
+  private broadcaster: WebSocketServer;
 
   constructor() {
     this.cryptoTradeDao = new CryptoTradeDao();
@@ -20,6 +22,7 @@ export class CryptoMarketDataService {
       this.flushInterval,
       this.flushBufferToDatabase.bind(this)
     );
+    this.broadcaster = new WebSocketServer(8080);
   }
 
   private async flushBufferToDatabase(
@@ -28,6 +31,8 @@ export class CryptoMarketDataService {
     try {
       logger.info(`Saving ${data.length} records to the database...`);
       await this.cryptoTradeDao.saveBatch(data);
+      //TODO: format message structure before sending the frontend
+      this.broadcaster.broadcast(data);
     } catch (error) {
       logger.error("Failed to save data to the database", error);
       throw new Error(); // Let the BufferManager handle retries

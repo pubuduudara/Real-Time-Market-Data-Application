@@ -1,7 +1,7 @@
 import { AppDataSource } from "../config/database";
 import dotenv from "dotenv";
 import logger from "./utils/logger.utils";
-import { CryptoClient } from "./websockets/cryptoClient";
+import { CryptoClient } from "./websockets/subscribers/cryptoClient";
 
 dotenv.config();
 
