@@ -14,10 +14,10 @@ export class CryptoTradeEntity {
   @Column()
   exchange: string;
 
-  @Column()
+  @Column("decimal")
   lastSize: number;
 
-  @Column()
+  @Column("decimal")
   lastPrice: number;
 }
 
