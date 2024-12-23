@@ -2,5 +2,5 @@
   "watch": ["src", "config"],
   "ext": ".ts",
   "ignore": [],
-  "exec": "ts-node ./src/main.feed.ts"
+  "exec": "ts-node ./src/main.news.ts"
 }

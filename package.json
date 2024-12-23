@@ -11,7 +11,8 @@
     "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
     "run:feed": "ts-node src/main.feed.ts",
-    "run:rest": "ts-node src/main.rest.ts"
+    "run:rest": "ts-node src/main.rest.ts",
+    "run:news": "ts-node src/main.news.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "express": "^4.21.2",
     "joi": "^17.13.3",
     "pg": "^8.13.1",
