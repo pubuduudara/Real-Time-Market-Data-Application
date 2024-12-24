@@ -17,7 +17,7 @@ cd Real-Time-Market-Data-Application
 npm install
 ```
 
-### 2. Create a `.env` File in the project root
+### 2. Use `.env` File in the project root
 
 Create a `.env` file in the root of the project and add the following configuration:
 
@@ -53,7 +53,7 @@ VALID_API_KEYS=abcd
   - `TINGO_AUTH_KEY`: Obtain your authentication key from [Tiingo](https://www.tiingo.com/).
 
 - **Authentication Configuration:**
-- `VALID_API_KEYS`: Comma-separated list of valid API keys for authenticating requests.
+- `VALID_API_KEYS`: Comma-separated list of valid API keys for authenticating requests. (Note: this should be passed in each REST API header. use `x-api-key` as the header key)
 
 ### 3. Obtain API Keys
 
