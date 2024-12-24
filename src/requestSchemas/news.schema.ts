@@ -1,5 +1,5 @@
 import Joi from "joi";
-//TODO: validation messages are vague
+
 export const getAllNewsSchema = Joi.object({
   page: Joi.number().integer().min(1).default(1).messages({
     "number.base": "page must be a number.",

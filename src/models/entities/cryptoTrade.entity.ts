@@ -20,5 +20,3 @@ export class CryptoTradeEntity {
   @Column("decimal")
   lastPrice: number;
 }
-
-//TODO: add key constraints like uniqe keys

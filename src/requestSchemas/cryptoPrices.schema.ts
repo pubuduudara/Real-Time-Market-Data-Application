@@ -1,5 +1,5 @@
 import Joi from "joi";
-//TODO: validation messages are vague
+
 export const cryptoPricesSchema = Joi.object({
   tickers: Joi.string()
     .optional()

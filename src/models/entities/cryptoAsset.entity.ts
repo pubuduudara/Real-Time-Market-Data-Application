@@ -11,5 +11,3 @@ export class CryptoAssetEntity {
   @Column()
   createdAt: Date;
 }
-
-//TODO: add key constraints like uniqe keys

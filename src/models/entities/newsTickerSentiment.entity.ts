@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { NewsArticleEntity } from "./newsArticle.entity";
 
-//TODO: add News as a prefix for db tables
 @Entity("TickerSentiments")
 export class TickerSentimentEntity {
   @PrimaryGeneratedColumn("uuid")

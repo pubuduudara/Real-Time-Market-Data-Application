@@ -16,8 +16,6 @@ export class NewsController {
         pageSize: Number(pageSize),
       });
 
-      //TODO: add response mapper DTOs
-
       handleSuccess(res, {
         news: news.data,
         total: news.total,
@@ -38,8 +36,6 @@ export class NewsController {
         page: Number(page),
         pageSize: Number(pageSize),
       });
-
-      //TODO: add response mapper DTOs
 
       handleSuccess(res, {
         news: news.data,

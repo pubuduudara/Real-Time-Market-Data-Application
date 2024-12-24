@@ -12,7 +12,6 @@ export class CryptoTradeDao {
   }
 
   /**
-   * TODO: move this to a seperate mapper folder
    * Maps a CryptoMarketDataDTO to a CryptoTradeEntity.
    * @param {CryptoMarketDataDTO} dto - The DTO to map.
    * @returns {CryptoTradeEntity} - The mapped entity.

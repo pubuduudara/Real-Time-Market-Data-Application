@@ -1,3 +1,7 @@
+/**
+ * Service for managing and processing news articles.
+ * Handles fetching, saving, and querying news data.
+ */
 import { ApiClient } from "../api/apiClient";
 import { NewsArticleDao } from "../models/dao/newArticle.dao";
 import { ArticleTopicEntity } from "../models/entities/newsArticleTopic.entity";
@@ -5,12 +9,10 @@ import { NewsArticleEntity } from "../models/entities/newsArticle.entity";
 import { TickerSentimentEntity } from "../models/entities/newsTickerSentiment.entity";
 import logger from "../utils/logger.utils";
 import { AuthorEntity } from "../models/entities/author.entity";
-//TODO: add interfaces to other methods as well
 interface GetAllNewsParams {
   page: number;
   pageSize: number;
 }
-
 interface GetNewsByTopicsParams {
   topics: string[];
   page: number;
@@ -25,6 +27,11 @@ export class NewsService {
     this.newsArticleDao = new NewsArticleDao();
   }
 
+  /**
+   * Fetches news articles and saves them to the database.
+   * @returns {Promise<void>}
+   * @throws {Error} - If fetching or saving data fails.
+   */
   async fetchAndSaveNews(): Promise<void> {
     try {
       // Fetch news data using ApiClient
@@ -40,6 +47,11 @@ export class NewsService {
     }
   }
 
+  /**
+   * Saves a news article to the database.
+   * @param {any} articleData - The raw data of the article.
+   * @returns {Promise<void>}
+   */
   private async saveArticle(articleData: any): Promise<void> {
     // Parse and validate timePublished
     let timePublished: Date | null = null;
@@ -89,13 +101,22 @@ export class NewsService {
     await this.newsArticleDao.save(article);
   }
 
-  //TODO: change return type here
+  /**
+   * Retrieves all news articles with pagination.
+   * @param {GetAllNewsParams} params - The pagination parameters.
+   * @returns {Promise<any>} - The paginated news data and total count.
+   */
   async getAllNews(params: GetAllNewsParams): Promise<any> {
     const [data, total] = await this.newsArticleDao.getAllNews(params);
 
     return { data, total };
   }
 
+  /**
+   * Retrieves news articles filtered by topics with pagination.
+   * @param {GetNewsByTopicsParams} params - The filter and pagination parameters.
+   * @returns {Promise<any>} - The filtered news data and total count.
+   */
   public async getNewsByTopics(params: GetNewsByTopicsParams): Promise<any> {
     const { topics, page, pageSize } = params;
 

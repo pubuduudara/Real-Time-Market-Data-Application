@@ -1,3 +1,8 @@
+/**
+ * Service for managing crypto assets.
+ * Provides methods for retrieving and handling crypto asset data.
+ */
+
 import { CryptoAssetDao } from "../models/dao/cryptoAsset.dao";
 import { CryptoAssetEntity } from "../models/entities/cryptoAsset.entity";
 import logger from "../utils/logger.utils";

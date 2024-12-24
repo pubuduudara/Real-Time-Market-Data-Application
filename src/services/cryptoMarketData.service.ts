@@ -1,3 +1,6 @@
+/**
+ * Service for managing crypto market data
+ */
 import { CryptoMarketDataDTO } from "../dto/cryptoMarketData.dto";
 import { CryptoAssetDao } from "../models/dao/cryptoAsset.dao";
 import { CryptoTradeDao } from "../models/dao/cryptoTrade.dao";
@@ -7,13 +10,17 @@ import { WebSocketServer } from "../websockets/publishers/webSocketServer";
 import { BufferManager } from "./bufferManager.service";
 
 export class CryptoMarketDataService {
-  private bufferManager: BufferManager<CryptoMarketDataDTO>;
+  private bufferManager: BufferManager<CryptoMarketDataDTO>; // Manages buffered data and its periodic flush
   private cryptoTradeDao: CryptoTradeDao;
   private cryptoAssetDao: CryptoAssetDao;
-  private bufferLimit = 100;
-  private flushInterval = 5000;
+  private bufferLimit = 100; // Maximum buffer size before flushing data to database
+  private flushInterval = 5000; //Interval for flushing buffer to the database (in milliseconds)
   private broadcaster: WebSocketServer;
 
+  /**
+   * Initializes the CryptoMarketDataService.
+   * Sets up DAOs, buffer management, and WebSocket broadcasting.
+   */
   constructor() {
     this.cryptoTradeDao = new CryptoTradeDao();
     this.cryptoAssetDao = new CryptoAssetDao();
@@ -25,20 +32,31 @@ export class CryptoMarketDataService {
     this.broadcaster = new WebSocketServer(8080);
   }
 
+  /**
+   * Flushes buffered data to the database and broadcasts updates.
+   * @param {CryptoMarketDataDTO[]} data - The buffered data to save and broadcast.
+   * @returns {Promise<void>}
+   */
   private async flushBufferToDatabase(
     data: CryptoMarketDataDTO[]
   ): Promise<void> {
     try {
-      logger.info(`Saving ${data.length} records to the database...`);
       await this.cryptoTradeDao.saveBatch(data);
-      //TODO: format message structure before sending the frontend
       this.broadcaster.broadcast(data);
+      logger.info(
+        `Saving ${data.length} records to the database completed and broadcast to frontend`
+      );
     } catch (error) {
       logger.error("Failed to save data to the database", error);
-      throw new Error(); // Let the BufferManager handle retries
+      throw new Error();
     }
   }
 
+  /**
+   * Adds a single market data record to the buffer.
+   * @param {CryptoMarketDataDTO} data - The market data to buffer.
+   * @returns {Promise<void>}
+   */
   public async addToBuffer(data: CryptoMarketDataDTO): Promise<void> {
     await this.bufferManager.addToBuffer(data);
   }

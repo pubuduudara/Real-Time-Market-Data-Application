@@ -11,8 +11,7 @@ export class CryptoMarketPriceController {
   public async getPrices(req: Request, res: Response): Promise<void> {
     try {
       const { tickers, startDate, endDate, page, pageSize } = req.query;
-      // Parse tickers
-      //TODO: check if we can do these modifications in the JOI middleware
+
       const tickersArray = tickers ? (tickers as string).split(",") : undefined;
       const parsedStartDate = new Date(startDate as string);
       const parsedEndDate = AppUtil.parseDateOrDefault(endDate as string);
@@ -25,8 +24,6 @@ export class CryptoMarketPriceController {
         currentPage,
         size
       );
-
-      //TODO: add response mapper DTOs
 
       handleSuccess(res, {
         trades: trades.data,
