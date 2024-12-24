@@ -10,12 +10,12 @@ import { WebSocketServer } from "../websockets/publishers/webSocketServer";
 import { BufferManager } from "./bufferManager.service";
 
 export class CryptoMarketDataService {
-  private bufferManager: BufferManager<CryptoMarketDataDTO>; // Manages buffered data and its periodic flush
+  private bufferManager: BufferManager<CryptoMarketDataDTO> | null = null; // Manages buffered data and its periodic flush
   private cryptoTradeDao: CryptoTradeDao;
   private cryptoAssetDao: CryptoAssetDao;
   private bufferLimit = 100; // Maximum buffer size before flushing data to database
   private flushInterval = 5000; //Interval for flushing buffer to the database (in milliseconds)
-  private broadcaster: WebSocketServer;
+  private broadcaster: WebSocketServer | null = null;
 
   /**
    * Initializes the CryptoMarketDataService.
@@ -24,12 +24,35 @@ export class CryptoMarketDataService {
   constructor() {
     this.cryptoTradeDao = new CryptoTradeDao();
     this.cryptoAssetDao = new CryptoAssetDao();
+  }
+
+  /**
+   * Initializes the BufferManager.
+   */
+  public initializeBufferManager(): void {
+    if (this.bufferManager) {
+      logger.warn("BufferManager is already initialized");
+      return;
+    }
     this.bufferManager = new BufferManager<CryptoMarketDataDTO>(
       this.bufferLimit,
       this.flushInterval,
       this.flushBufferToDatabase.bind(this)
     );
-    this.broadcaster = new WebSocketServer(8080);
+    logger.info("BufferManager initialized successfully");
+  }
+
+  /**
+   * Initializes the WebSocket Broadcaster.
+   * @param port - Port number for WebSocket server
+   */
+  public initializeBroadcaster(port: number): void {
+    if (this.broadcaster) {
+      logger.warn("Broadcaster is already initialized");
+      return;
+    }
+    this.broadcaster = new WebSocketServer(port);
+    logger.info(`Broadcaster initialized on port ${port}`);
   }
 
   /**

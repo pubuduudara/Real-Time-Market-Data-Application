@@ -12,11 +12,12 @@ Follow these steps to set up and run the application locally:
 # Clone the repository to your local machine
 git clone https://github.com/pubuduudara/Real-Time-Market-Data-Application.git
 
-# Navigate into the cloned directory
 cd Real-Time-Market-Data-Application
+#run
+npm install
 ```
 
-### 2. Create a `.env` File
+### 2. Create a `.env` File in the project root
 
 Create a `.env` file in the root of the project and add the following configuration:
 
@@ -206,8 +207,6 @@ The project is structured as follows:
   - **`main.feed.ts`**: Script to consume data from the Tiingo crypto WebSocket. Use `npm run run:feed` to execute.
   - **`main.news.ts`**: Script to fetch news data from Alpha Vantage. Use `npm run run:news` to execute.
   - **`main.rest.ts`**: Script to expose REST APIs for fetching data. Use `npm run run:rest` to execute.
-- **`test/`**: Contains test cases.
-- **`build/`**: Contains the transpiled JavaScript code.
 
 ## Commands
 
@@ -246,7 +245,3 @@ The design of the application incorporates separate processes for different func
    - The application secures API endpoints using an API key-based authentication mechanism.
    - Valid API keys are configured via the VALID_API_KEYS environment variable.
    - This approach ensures only authorized clients can access the application, enhancing security and preventing unauthorized usage.
-
-## API Documentation
-
-Details about the REST APIs will be provided in the next section.

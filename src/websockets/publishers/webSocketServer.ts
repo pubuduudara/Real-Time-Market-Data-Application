@@ -1,4 +1,7 @@
-// WebSocketBroadcaster.ts
+/**
+ * WebSocket server for broadcasting messages to connected clients.
+ * Manages client connections and provides methods for sending data and shutting down the server.
+ */
 import WebSocket from "ws";
 import logger from "../../utils/logger.utils";
 
@@ -12,6 +15,9 @@ export class WebSocketServer {
     this.setupServer();
   }
 
+  /**
+   * Sets up the WebSocket server to handle client connections and events
+   */
   private setupServer(): void {
     logger.info(
       `Starting WebSocket broadcaster on port ${this.wss.options.port}`
@@ -36,6 +42,11 @@ export class WebSocketServer {
     });
   }
 
+  /**
+   * Broadcasts a message to all connected WebSocket clients.
+   * Only sends messages to clients that are in the 'OPEN' state.
+   * @param {any} data - The data to broadcast. It will be serialized to JSON.
+   */
   public broadcast(data: any): void {
     const message = JSON.stringify(data);
     this.clients.forEach((client) => {

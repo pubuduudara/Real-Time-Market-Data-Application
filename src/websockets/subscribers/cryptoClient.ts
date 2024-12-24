@@ -17,6 +17,8 @@ export class CryptoClient extends WebSocketClient {
   constructor(url: string) {
     super(url);
     this.cryptoMarketDataService = new CryptoMarketDataService();
+    this.cryptoMarketDataService.initializeBroadcaster(8080);
+    this.cryptoMarketDataService.initializeBufferManager();
   }
 
   /**
