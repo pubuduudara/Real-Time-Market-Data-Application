@@ -5,8 +5,9 @@ import {
   CreateDateColumn,
   OneToMany,
 } from "typeorm";
-import { ArticleTopicEntity } from "./articleTopic.entity";
-import { TickerSentimentEntity } from "./tickerSentiment.entity";
+import { ArticleTopicEntity } from "./newsArticleTopic.entity";
+import { TickerSentimentEntity } from "./newsTickerSentiment.entity";
+import { AuthorEntity } from "./author.entity";
 
 @Entity("NewsArticles")
 export class NewsArticleEntity {
@@ -21,9 +22,6 @@ export class NewsArticleEntity {
 
   @Column({ type: "timestamp", nullable: true })
   timePublished!: Date;
-
-  @Column("text", { array: true })
-  authors!: string[];
 
   @Column({ nullable: true })
   summary!: string;
@@ -58,4 +56,9 @@ export class NewsArticleEntity {
     cascade: true,
   })
   tickerSentiments!: TickerSentimentEntity[];
+
+  @OneToMany(() => AuthorEntity, (author) => author.newsArticle, {
+    cascade: true,
+  })
+  authors!: AuthorEntity[];
 }

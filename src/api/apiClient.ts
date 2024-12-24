@@ -3,13 +3,12 @@ import logger from "../utils/logger.utils";
 
 export class ApiClient {
   //TODO make this class more nicer
-  async fetchNewsSentiment(topics: string): Promise<any[]> {
+  async fetchNewsSentiment(): Promise<any[]> {
     try {
       const response = await axios.get(process.env.NEWS_API_HOST, {
         params: {
           function: "NEWS_SENTIMENT",
           apikey: process.env.NEWS_API_KEY,
-          topics: topics,
         },
       });
 

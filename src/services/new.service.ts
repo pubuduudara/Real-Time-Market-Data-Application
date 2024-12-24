@@ -1,10 +1,15 @@
 import { ApiClient } from "../api/apiClient";
 import { NewsArticleDao } from "../models/dao/newArticle.dao";
-import { ArticleTopicEntity } from "../models/entities/articleTopic.entity";
+import { ArticleTopicEntity } from "../models/entities/newsArticleTopic.entity";
 import { NewsArticleEntity } from "../models/entities/newsArticle.entity";
-import { TickerSentimentEntity } from "../models/entities/tickerSentiment.entity";
+import { TickerSentimentEntity } from "../models/entities/newsTickerSentiment.entity";
 import logger from "../utils/logger.utils";
-
+import { AuthorEntity } from "../models/entities/author.entity";
+//TODO: add interfaces to other methods as well
+interface GetAllNewsParams {
+  page: number;
+  pageSize: number;
+}
 export class NewsService {
   private apiClient: ApiClient;
   private newsArticleDao: NewsArticleDao;
@@ -14,10 +19,10 @@ export class NewsService {
     this.newsArticleDao = new NewsArticleDao();
   }
 
-  async fetchAndSaveNews(topics: string): Promise<void> {
+  async fetchAndSaveNews(): Promise<void> {
     try {
       // Fetch news data using ApiClient
-      const articlesData = await this.apiClient.fetchNewsSentiment(topics);
+      const articlesData = await this.apiClient.fetchNewsSentiment();
 
       // Save articles to the database
       for (const articleData of articlesData) {
@@ -43,7 +48,6 @@ export class NewsService {
     article.title = articleData.title;
     article.url = articleData.url;
     article.timePublished = timePublished;
-    article.authors = articleData.authors || [];
     article.summary = articleData.summary || null;
     article.bannerImage = articleData.banner_image || null;
     article.source = articleData.source;
@@ -51,6 +55,12 @@ export class NewsService {
     article.sourceDomain = articleData.source_domain;
     article.overallSentimentScore = articleData.overall_sentiment_score || null;
     article.overallSentimentLabel = articleData.overall_sentiment_label || null;
+
+    article.authors = (articleData.authors || []).map((authorName: string) => {
+      const author = new AuthorEntity();
+      author.name = authorName;
+      return author;
+    });
 
     article.topics = (articleData.topics || []).map((topicData: any) => {
       const topic = new ArticleTopicEntity();
@@ -71,5 +81,12 @@ export class NewsService {
     );
 
     await this.newsArticleDao.save(article);
+  }
+
+  //TODO: change return type here
+  async getAllNews(params: GetAllNewsParams): Promise<any> {
+    const [data, total] = await this.newsArticleDao.getAllNews(params);
+
+    return { data, total };
   }
 }

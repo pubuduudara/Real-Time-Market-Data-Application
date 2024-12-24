@@ -29,7 +29,7 @@ export class CryptoMarketPriceController {
       //TODO: add response mapper DTOs
 
       handleSuccess(res, {
-        data: trades.data,
+        trades: trades.data,
         total: trades.total,
         page: currentPage,
         pageSize: size,

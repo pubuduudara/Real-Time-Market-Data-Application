@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../../../config/database";
-import { ArticleTopicEntity } from "../entities/articleTopic.entity";
+import { ArticleTopicEntity } from "../entities/newsArticleTopic.entity";
 
 /** This class is responsible for database operations connecting with the Article Topic table */
 export class ArticleTopicDao {

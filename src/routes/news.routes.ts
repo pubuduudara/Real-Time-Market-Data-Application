@@ -1,14 +1,25 @@
-// import express from "express";
-// import { CryptoMarketPriceController } from "../controllers/cryptoMarketPrice.controller";
-// import { validateRequest } from "../middlewares/requestValidator";
-// import { cryptoPricesSchema } from "../requestSchemas/cryptoPrices.schema";
+import express from "express";
+import { validateRequest } from "../middlewares/requestValidator";
+import { NewsController } from "../controllers/news.controller";
+import { getAllNewsSchema } from "../requestSchemas/news.schema";
 
-// const router = express.Router();
+class NewsRoutes {
+  public router: express.Router;
+  private newsController: NewsController;
 
-// router.get(
-//   "/news",
-//   validateRequest(cryptoPricesSchema, "query"),
-//   CryptoMarketPriceController.getPrices
-// );
+  constructor() {
+    this.router = express.Router();
+    this.newsController = new NewsController();
+    this.initializeRoutes();
+  }
 
-// export default router;
+  private initializeRoutes(): void {
+    this.router.get(
+      "/news",
+      validateRequest(getAllNewsSchema, "query"),
+      (req, res) => this.newsController.getAllNews(req, res)
+    );
+  }
+}
+
+export default new NewsRoutes().router;

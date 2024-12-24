@@ -11,7 +11,7 @@ dotenv.config();
 
     const newsService = new NewsService();
 
-    await newsService.fetchAndSaveNews("blockchain");
+    await newsService.fetchAndSaveNews();
 
     logger.info("News fetched and saved successfully");
   } catch (error) {
