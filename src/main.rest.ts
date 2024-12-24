@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import logger from "./utils/logger.utils";
 import express from "express";
 import AppRoutes from "./routes/app.routes";
+import { authenticateApiKey } from "./middlewares/auth.middleware";
+
 dotenv.config();
 
 const PORT = process.env.API_PORT || 3000;
@@ -13,6 +15,8 @@ AppDataSource.initialize()
 
     const app = express();
     app.use(express.json());
+
+    app.use(authenticateApiKey); // Apply authentication middleware to all API routesf
 
     app.use("/", AppRoutes);
 
