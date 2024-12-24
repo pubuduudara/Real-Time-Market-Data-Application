@@ -1,7 +1,10 @@
 import express from "express";
 import { validateRequest } from "../middlewares/requestValidator";
 import { NewsController } from "../controllers/news.controller";
-import { getAllNewsSchema } from "../requestSchemas/news.schema";
+import {
+  getAllNewsSchema,
+  getNewsByTopicSchema,
+} from "../requestSchemas/news.schema";
 
 class NewsRoutes {
   public router: express.Router;
@@ -17,7 +20,13 @@ class NewsRoutes {
     this.router.get(
       "/news",
       validateRequest(getAllNewsSchema, "query"),
-      (req, res) => this.newsController.getAllNews(req, res)
+      (req, res) => this.newsController.getAll(req, res)
+    );
+
+    this.router.get(
+      "/news/by-topic",
+      validateRequest(getNewsByTopicSchema, "query"),
+      (req, res) => this.newsController.getByTopic(req, res)
     );
   }
 }

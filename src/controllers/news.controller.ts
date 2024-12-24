@@ -7,11 +7,34 @@ export class NewsController {
   constructor() {
     this.newsService = new NewsService();
   }
-  public async getAllNews(req: Request, res: Response): Promise<void> {
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
       const { page, pageSize } = req.query;
 
       const news = await this.newsService.getAllNews({
+        page: Number(page),
+        pageSize: Number(pageSize),
+      });
+
+      //TODO: add response mapper DTOs
+
+      handleSuccess(res, {
+        news: news.data,
+        total: news.total,
+        page: Number(page),
+        pageSize: Number(pageSize),
+      });
+    } catch (err) {
+      handleError(res, err);
+    }
+  }
+
+  public async getByTopic(req: Request, res: Response): Promise<void> {
+    try {
+      const { topics, page, pageSize } = req.query;
+
+      const news = await this.newsService.getNewsByTopics({
+        topics: String(topics).split(","),
         page: Number(page),
         pageSize: Number(pageSize),
       });

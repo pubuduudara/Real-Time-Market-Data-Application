@@ -10,6 +10,12 @@ interface GetAllNewsParams {
   page: number;
   pageSize: number;
 }
+
+interface GetNewsByTopicsParams {
+  topics: string[];
+  page: number;
+  pageSize: number;
+}
 export class NewsService {
   private apiClient: ApiClient;
   private newsArticleDao: NewsArticleDao;
@@ -87,6 +93,17 @@ export class NewsService {
   async getAllNews(params: GetAllNewsParams): Promise<any> {
     const [data, total] = await this.newsArticleDao.getAllNews(params);
 
+    return { data, total };
+  }
+
+  public async getNewsByTopics(params: GetNewsByTopicsParams): Promise<any> {
+    const { topics, page, pageSize } = params;
+
+    const [data, total] = await this.newsArticleDao.getNewsByTopics({
+      topics,
+      page,
+      pageSize,
+    });
     return { data, total };
   }
 }
