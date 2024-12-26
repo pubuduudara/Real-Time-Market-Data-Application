@@ -2,7 +2,9 @@ import { AppDataSource } from "../config/database";
 import dotenv from "dotenv";
 import { NewsService } from "./services/new.service";
 import logger from "./utils/logger.utils";
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+});
 
 (async () => {
   try {

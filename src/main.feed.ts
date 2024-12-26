@@ -8,7 +8,9 @@ import dotenv from "dotenv";
 import logger from "./utils/logger.utils";
 import { CryptoClient } from "./websockets/subscribers/cryptoClient";
 
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+});
 
 AppDataSource.initialize()
   .then(() => {

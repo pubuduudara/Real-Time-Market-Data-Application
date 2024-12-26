@@ -5,27 +5,31 @@ import express from "express";
 import AppRoutes from "./routes/app.routes";
 import { authenticateApiKey } from "./middlewares/auth.middleware";
 import { setupSwagger } from "./swagger";
-
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+});
 
 const PORT = process.env.API_PORT || 3000;
 
-AppDataSource.initialize()
-  .then(() => {
-    logger.info("Database connection established");
+const app = express(); // Create the Express app
+app.use(express.json());
+app.use(authenticateApiKey); // Apply authentication middleware to all API routes
+app.use("/", AppRoutes);
+setupSwagger(app);
 
-    const app = express();
-    app.use(express.json());
+// Only start the server if not in a test environment
+if (process.env.NODE_ENV !== "test") {
+  AppDataSource.initialize()
+    .then(() => {
+      logger.info("Database connection established");
 
-    app.use(authenticateApiKey); // Apply authentication middleware to all API routesf
-
-    app.use("/", AppRoutes);
-    setupSwagger(app);
-
-    app.listen(PORT, () => {
-      logger.info(`Server is running on port ${PORT}`);
+      app.listen(PORT, () => {
+        logger.info(`Server is running on port ${PORT}`);
+      });
+    })
+    .catch((error) => {
+      logger.error(`Error initializing database: ${error}`);
     });
-  })
-  .catch((error) => {
-    logger.error(`Error initializing database: ${error}`);
-  });
+}
+
+export default app; // Export the app for testing
