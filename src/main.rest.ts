@@ -4,6 +4,7 @@ import logger from "./utils/logger.utils";
 import express from "express";
 import AppRoutes from "./routes/app.routes";
 import { authenticateApiKey } from "./middlewares/auth.middleware";
+import { setupSwagger } from "./swagger";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ AppDataSource.initialize()
     app.use(authenticateApiKey); // Apply authentication middleware to all API routesf
 
     app.use("/", AppRoutes);
+    setupSwagger(app);
 
     app.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);

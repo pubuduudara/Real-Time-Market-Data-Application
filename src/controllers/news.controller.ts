@@ -47,4 +47,25 @@ export class NewsController {
       handleError(res, err);
     }
   }
+
+  public async getByAuthor(req: Request, res: Response): Promise<void> {
+    try {
+      const { author, page, pageSize } = req.query;
+
+      const news = await this.newsService.getNewsByAuthor({
+        author: String(author),
+        page: Number(page),
+        pageSize: Number(pageSize),
+      });
+
+      handleSuccess(res, {
+        news: news.data,
+        total: news.total,
+        page: Number(page),
+        pageSize: Number(pageSize),
+      });
+    } catch (err) {
+      handleError(res, err);
+    }
+  }
 }

@@ -18,6 +18,12 @@ interface GetNewsByTopicsParams {
   page: number;
   pageSize: number;
 }
+
+interface GetNewsByAuthorParams {
+  author: string;
+  page: number;
+  pageSize: number;
+}
 export class NewsService {
   private apiClient: ApiClient;
   private newsArticleDao: NewsArticleDao;
@@ -122,6 +128,22 @@ export class NewsService {
 
     const [data, total] = await this.newsArticleDao.getNewsByTopics({
       topics,
+      page,
+      pageSize,
+    });
+    return { data, total };
+  }
+
+  /**
+   * Retrieves news articles filtered by author with pagination.
+   * @param {GetNewsByAuthorParams} params - The filter and pagination parameters.
+   * @returns {Promise<any>} - The filtered news data and total count.
+   */
+  public async getNewsByAuthor(params: GetNewsByAuthorParams): Promise<any> {
+    const { author, page, pageSize } = params;
+
+    const [data, total] = await this.newsArticleDao.getNewsByAuthor({
+      author,
       page,
       pageSize,
     });

@@ -18,6 +18,10 @@ export function authenticateApiKey(
   res: Response,
   next: NextFunction
 ): void {
+  // Skip authentication for Swagger-related routes
+  if (req.path.startsWith("/api-docs")) {
+    return next();
+  }
   const apiKey = req.header("x-api-key");
 
   if (!apiKey) {

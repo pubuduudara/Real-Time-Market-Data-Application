@@ -11,6 +11,12 @@ interface GetNewsByTopicsParams {
   page: number;
   pageSize: number;
 }
+
+interface GetNewsByAuthorParams {
+  author: string;
+  page: number;
+  pageSize: number;
+}
 /** This class is responsible for database operations connecting with the NewsArticle table */
 export class NewsArticleDao {
   private repository: Repository<NewsArticleEntity>;
@@ -47,6 +53,27 @@ export class NewsArticleDao {
       .where("topics.topic IN (:...topics)", { topics })
       .take(pageSize)
       .skip((page - 1) * pageSize);
+
+    const [data, total] = await queryBuilder.getManyAndCount();
+
+    const transformedData = data.map((article) => {
+      const { topics, ...rest } = article; // Destructure and exclude the 'topics' field
+      return rest;
+    });
+
+    return [transformedData, total];
+  }
+
+  public async getNewsByAuthor(params: GetNewsByAuthorParams): Promise<any> {
+    const { author, page, pageSize } = params;
+    const queryBuilder = this.repository.createQueryBuilder("news");
+
+    queryBuilder
+      .innerJoinAndSelect("news.authors", "authors") // Join with the authors table
+      .leftJoinAndSelect("news.tickerSentiments", "tickerSentiments") // Include ticker sentiments
+      .where("authors.name = :author", { author }) // Use direct comparison
+      .take(pageSize) // Limit results
+      .skip((page - 1) * pageSize); // Offset for pagination
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
