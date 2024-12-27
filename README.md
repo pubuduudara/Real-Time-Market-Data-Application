@@ -203,7 +203,7 @@ if __name__ == "__main__":
         print("Closing WebSocket connection.")
 ```
 
-- `npm run run:rest`: Starts the REST API server for data access.
+- `npm run run:rest`: Starts the REST API server for data access. Once the REST API server is running you can view the API documentation via `http://localhost:3000/api-docs/`. You can execute APIs from the swagger portal. First authorize the API by clicking the Authorize button (set x-api-key in the header). Then you can use the API from the portal itself
 - `npm run test:unit`: Executes unit test cases
 - `npm run test:integration`: Executes integration test cases
 - `npm run test`: Executes all test cases
