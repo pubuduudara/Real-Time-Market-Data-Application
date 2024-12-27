@@ -1,3 +1,12 @@
+/**
+ * Main entry point for the REST API server.
+ *
+ * - Sets up and initializes the Express application.
+ * - Applies middleware for authentication and JSON parsing.
+ * - Sets up Swagger for API documentation.
+ * - Initializes the database connection (if not in test mode).
+ * - Starts the server and listens on the specified port.
+ */
 import { AppDataSource } from "../config/database";
 import dotenv from "dotenv";
 import logger from "./utils/logger.utils";

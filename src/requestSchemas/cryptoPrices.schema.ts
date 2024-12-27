@@ -1,5 +1,16 @@
 import Joi from "joi";
 
+/**
+ * Schema for validating crypto prices query parameters.
+ *
+ * The schema defines the following fields:
+ * - `tickers`: An optional comma-separated list of ticker symbols (only alphabets allowed).
+ * - `startDate`: A required string representing the start date in the format `YYYY-MM-DD`.
+ * - `endDate`: An optional string representing the end date in the format `YYYY-MM-DD`.
+ * - `page`: An optional integer specifying the page number for pagination (minimum value: 1, default: 1).
+ * - `pageSize`: An optional integer specifying the number of items per page (minimum value: 1, default: 10).
+ */
+
 export const cryptoPricesSchema = Joi.object({
   tickers: Joi.string()
     .optional()

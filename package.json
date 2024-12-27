@@ -7,8 +7,6 @@
     "test": "test"
   },
   "scripts": {
-    "start": "npx tsc && node build/app.js",
-    "dev": "nodemon",
     "run:feed": "ts-node src/main.feed.ts",
     "run:rest": "ts-node src/main.rest.ts",
     "test": "cross-env NODE_ENV=test jest",

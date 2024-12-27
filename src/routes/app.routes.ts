@@ -1,3 +1,6 @@
+/**
+ * Class representing the application routes.
+ */
 import express from "express";
 import cryptoMarketRouter from "./cryptoMarket.routes";
 class AppRoutes {
