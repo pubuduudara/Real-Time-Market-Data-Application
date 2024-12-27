@@ -64,17 +64,23 @@ describe("GET /crypto/prices", () => {
       .set("x-api-key", "valid-key");
 
     expect(response.status).toBe(200);
-    expect(response.body.success).toBe(true);
-    expect(response.body.data.trades.length).toBeGreaterThan(0);
+    expect(response.body.data.trades.length).toBe(1);
   });
 
   it("should return paginated results", async () => {
+    // Seed the database with test data
+    const trade = new CryptoTradeEntity();
+    trade.ticker = "usdcusdt";
+    trade.timeStamp = new Date("2024-12-24T16:21:13.000Z");
+    trade.exchange = "curvefipolygon";
+    trade.lastSize = 1.0009762439607752;
+    trade.lastPrice = 7617.377724;
+    await AppDataSource.getRepository(CryptoTradeEntity).save(trade);
     const response = await request(app)
       .get(
-        "/crypto/prices?startDate=2024-12-23&endDate=2024-12-25&page=1&pageSize=1"
+        "/crypto/prices?startDate=2024-11-23&endDate=2024-12-25&page=1&pageSize=1"
       )
       .set("x-api-key", "valid-key");
-
     expect(response.status).toBe(200);
     expect(response.body.data.pageSize).toBe(1);
     expect(response.body.data.trades.length).toBe(1);

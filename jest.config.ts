@@ -7,7 +7,6 @@ const config: Config = {
     "^src/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"], // Use TypeScript for setup file
   transform: {
     "^.+\\.tsx?$": "ts-jest", // Transpile TypeScript test files
   },

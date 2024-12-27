@@ -20,7 +20,7 @@ export class NewsArticleEntity {
   @Column({ nullable: true })
   url!: string;
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ nullable: true })
   timePublished!: Date;
 
   @Column({ nullable: true })
