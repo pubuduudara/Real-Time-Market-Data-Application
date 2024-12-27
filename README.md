@@ -158,8 +158,11 @@ The project is structured as follows:
 
 The following commands can be executed from the terminal:
 
-- `npm run run:feed`: Consumes data from the Tiingo crypto WebSocket and saves it to the database.
+- `npm run run:feed`: Consumes data from the Tiingo crypto WebSocket and saves it to the database and publish to connected frontend clients.
 - `npm run run:rest`: Starts the REST API server for data access.
+- `npm run test:unit`: Executes unit test cases
+- `npm run test:integration`: Executes integration test cases
+- `npm run test`: Executes all test cases
 
 ## Design Considerations
 
