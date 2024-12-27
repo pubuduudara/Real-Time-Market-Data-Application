@@ -11,7 +11,6 @@
     "dev": "nodemon",
     "run:feed": "ts-node src/main.feed.ts",
     "run:rest": "ts-node src/main.rest.ts",
-    "run:news": "ts-node src/main.news.ts",
     "test": "cross-env NODE_ENV=test jest",
     "test:unit": "cross-env NODE_ENV=test jest tests/unit",
     "test:integration": "cross-env NODE_ENV=test jest tests/integration"

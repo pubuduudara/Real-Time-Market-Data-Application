@@ -1,6 +1,5 @@
 import express from "express";
 import cryptoMarketRouter from "./cryptoMarket.routes";
-import newsRouter from "./news.routes";
 class AppRoutes {
   public router: express.Router;
 
@@ -12,7 +11,6 @@ class AppRoutes {
   private initializeRoutes(): void {
     // Combine routes
     this.router.use("/", cryptoMarketRouter);
-    this.router.use("/", newsRouter);
   }
 }
 

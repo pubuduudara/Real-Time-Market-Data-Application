@@ -28,8 +28,6 @@ DB_PASSWORD=password
 DB_NAME=market-data
 DB_PORT=5441
 API_PORT=3000
-NEWS_API_HOST=https://www.alphavantage.co/query
-NEWS_API_KEY=
 CRYPTO_TIINGO_WEB_SOCKET=wss://api.tiingo.com/crypto
 TINGO_AUTH_KEY=
 VALID_API_KEYS=abcd
@@ -47,8 +45,6 @@ VALID_API_KEYS=abcd
 
 - **API Configuration:**
 
-  - `NEWS_API_HOST`: The base URL for Alpha Vantage API (`https://www.alphavantage.co/query`).
-  - `NEWS_API_KEY`: Obtain your API key from [Alpha Vantage](https://www.alphavantage.co/).
   - `CRYPTO_TIINGO_WEB_SOCKET`: The WebSocket URL for Tiingo's crypto API (`wss://api.tiingo.com/crypto`).
   - `TINGO_AUTH_KEY`: Obtain your authentication key from [Tiingo](https://www.tiingo.com/).
 
@@ -62,12 +58,6 @@ VALID_API_KEYS=abcd
 1. Visit [Tiingo](https://www.tiingo.com/).
 2. Sign up or log in to your account.
 3. Generate an API key and update the `TINGO_AUTH_KEY` field in the `.env` file.
-
-#### Alpha Vantage API Key:
-
-1. Visit [Alpha Vantage](https://www.alphavantage.co/).
-2. Sign up for an account.
-3. Generate an API key and update the `NEWS_API_KEY` field in the `.env` file.
 
 ### 4. Create a PostgreSQL Database
 
@@ -118,49 +108,6 @@ CREATE TABLE public."CryptoAssets" (
 	CONSTRAINT cryptoassets_un UNIQUE (ticker)
 );
 
-CREATE TABLE public."NewsArticles" (
-	id uuid NOT NULL DEFAULT uuid_generate_v4(),
-	title varchar NULL,
-	url varchar NULL,
-	"timePublished" timestamp NULL,
-	summary text NULL,
-	"bannerImage" text NULL,
-	"source" varchar NULL,
-	"categoryWithinSource" varchar NULL,
-	"sourceDomain" varchar NULL,
-	"overallSentimentScore" numeric NULL,
-	"overallSentimentLabel" varchar NULL,
-	"createdAt" timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "NewsArticles_pkey" PRIMARY KEY (id)
-);
-
-CREATE TABLE public."ArticleTopics" (
-	id uuid NOT NULL DEFAULT uuid_generate_v4(),
-	topic varchar NOT NULL,
-	"relevanceScore" numeric NULL,
-	"newsArticleId" uuid NOT NULL,
-	CONSTRAINT "ArticleTopics_pkey" PRIMARY KEY (id),
-	CONSTRAINT "FK_ArticleTopics_NewsArticles" FOREIGN KEY ("newsArticleId") REFERENCES public."NewsArticles"(id) ON DELETE CASCADE
-);
-
-CREATE TABLE public."Authors" (
-	id uuid NOT NULL DEFAULT uuid_generate_v4(),
-	"name" varchar NOT NULL,
-	"newsArticleId" uuid NOT NULL,
-	CONSTRAINT "Authors_pkey" PRIMARY KEY (id),
-	CONSTRAINT "FK_Authors_NewsArticles" FOREIGN KEY ("newsArticleId") REFERENCES public."NewsArticles"(id) ON DELETE CASCADE
-);
-
-CREATE TABLE public."TickerSentiments" (
-	id uuid NOT NULL DEFAULT uuid_generate_v4(),
-	ticker varchar NOT NULL,
-	"relevanceScore" numeric NULL,
-	"tickerSentimentScore" numeric NULL,
-	"tickerSentimentLabel" varchar NULL,
-	"newsArticleId" uuid NOT NULL,
-	CONSTRAINT "TickerSentiments_pkey" PRIMARY KEY (id),
-	CONSTRAINT "FK_TickerSentiments_NewsArticles" FOREIGN KEY ("newsArticleId") REFERENCES public."NewsArticles"(id) ON DELETE CASCADE
-);
 ```
 
 ### 6. Set Up Triggers and Stored Procedures
@@ -205,7 +152,6 @@ The project is structured as follows:
 
 - **`src/`**: Contains the source code.
   - **`main.feed.ts`**: Script to consume data from the Tiingo crypto WebSocket. Use `npm run run:feed` to execute.
-  - **`main.news.ts`**: Script to fetch news data from Alpha Vantage. Use `npm run run:news` to execute.
   - **`main.rest.ts`**: Script to expose REST APIs for fetching data. Use `npm run run:rest` to execute.
 
 ## Commands
@@ -213,7 +159,6 @@ The project is structured as follows:
 The following commands can be executed from the terminal:
 
 - `npm run run:feed`: Consumes data from the Tiingo crypto WebSocket and saves it to the database.
-- `npm run run:news`: Fetches news data from Alpha Vantage and saves it to the database.
 - `npm run run:rest`: Starts the REST API server for data access.
 
 ## Design Considerations
@@ -225,8 +170,7 @@ The design of the application incorporates separate processes for different func
    - Node.js operates on a single-threaded event loop, making it susceptible to blocking if multiple intensive tasks run within the same process.
    - To avoid such blocking, separate processes are designed for each key operation:
      - `npm run run:feed`: Fetches real-time crypto market data, stores it in the database, and streams it to the frontend via a dedicated WebSocket connection in real-time.
-     - `npm run run:news`: Fetches and stores news data from Alpha Vantage into the database.
-     - `npm run run:rest`: Exposes REST APIs for retrieving crypto market data and news.
+     - `npm run run:rest`: Exposes REST APIs for retrieving crypto market data.
    - This separation ensures high performance, scalability, and responsiveness by isolating tasks into manageable units.
 
 2. **Triggers and Stored Procedures**:
