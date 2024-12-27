@@ -158,7 +158,51 @@ The project is structured as follows:
 
 The following commands can be executed from the terminal:
 
-- `npm run run:feed`: Consumes data from the Tiingo crypto WebSocket and saves it to the database and publish to connected frontend clients.
+- `npm run run:feed`: When executed, the application will start consuming crypto market data from the Tiingo WebSocket. First, the data will be buffered and periodically saved in the CryptoTrades table. Thereafter, using stored procedures and deferred triggers, the data will be normalized to the Exchanges and CryptoAssets tables respectively. Additionally, at this time, the application will start sending real-time data to the connected frontend clients via WebSockets.t the following Python code when running the process to simulate how a frontend client will connect and consume data:
+
+use below commands to run it in the terminal (name frontendclinet.py)
+
+- `pip install websocket-client`
+- `python frontendclinet.py`
+
+```python
+import websocket
+import json
+
+def on_open(ws):
+    print("Connected to the WebSocket broadcaster.")
+
+def on_message(ws, message):
+    try:
+        data = json.loads(message)
+        print("Received data:", data)
+    except json.JSONDecodeError:
+        print("Received invalid JSON:", message)
+
+def on_close(ws, close_status_code, close_msg):
+    print("Disconnected from WebSocket broadcaster.")
+
+def on_error(ws, error):
+    print("WebSocket error:", error)
+
+if __name__ == "__main__":
+    ws_url = "ws://localhost:8080"
+
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp(
+        ws_url,
+        on_open=on_open,
+        on_message=on_message,
+        on_close=on_close,
+        on_error=on_error,
+    )
+
+    try:
+        ws.run_forever()
+    except KeyboardInterrupt:
+        print("Closing WebSocket connection.")
+```
+
 - `npm run run:rest`: Starts the REST API server for data access.
 - `npm run test:unit`: Executes unit test cases
 - `npm run test:integration`: Executes integration test cases
